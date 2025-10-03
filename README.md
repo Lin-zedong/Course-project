@@ -56,8 +56,8 @@
 2)   
    •	L1 (System Context) — показаны акторы (Студент, Преподаватель, Администратор), наш сервис “Schedule Watcher” и внешние системы (RUZ, Telegram/Email) с направлениями взаимодействий (HTTP/JSON, Push/Email).  
    •	L2 (Container) — контейнеры внутри системы: Web/API, Core Service, Fetcher, Notifier, PostgreSQL, Redis, Message Queue, а также связи с RUZ и каналами уведомлений.  
-   ![L1 (System Context)](C4modle/L1.drawio)  
-   ![L2 (Container)](C4modle/L2.drawio)  
+   ![L1 (System Context)](C4modle/L1.drawio.svg)  
+   ![L2 (Container)](C4modle/L2.drawio.svg)  
 3) Контраĸты API + Ожидаемые нефунĸциональные требования на время отĸлиĸа  
    Базовые эндпойнты (v1):  
    •	GET /ping → {"status":"pong"} (P99 ≤ 50 мс)  
