@@ -104,9 +104,13 @@
    •	Безопасные развёртывания: канареечные релизы/rollback, миграции схемы через версии.
 
 Разработка  
+Конкретный программный код находится в папке Course-project  
+  
 1. Schedule Watcher  
-![Schedule Watcher](C4model/L1.drawio.svg)
-
-
-
-
+![Schedule Watcher](Course-project/results/Schedule_Watcher.png)  
+2. Manage Subscriptions  
+![Manage Subscriptions](Course-project/results/Manage_Subscriptions.png)  
+3. Mails  
+![1](Course-project/results/Mail_1.png)  
+![2](Course-project/results/Mail_2.png)  
+![3](Course-project/results/Mail_3.png)  
