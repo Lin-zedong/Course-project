@@ -1,0 +1,14 @@
+# build outputs
+target/
+# vcs/ide
+.git/
+.gitignore
+.idea/
+*.iml
+.vscode/
+# os noise
+**/.DS_Store
+# archives
+*.zip
+*.tar
+*.tar.gz
