@@ -1,0 +1,15 @@
+--- a/src/main/java/com/example/schedulewatcher/service/NotificationService.java+++ b/src/main/java/com/example/schedulewatcher/service/NotificationService.java@@ -33,13 +33,14 @@     @Transactional(readOnly = true)
+     public void notifyByEmail(List<Subscription> subs, Event evt) {
+         for (Subscription s : subs) {
++            if (!isMeaningfulDiff(evt.getDiff())) { continue; }
+             String email = resolveEmail(s);
+             if (email == null || email.isBlank()) continue;
+             SimpleMailMessage msg = new SimpleMailMessage();
+             msg.setTo(email);
+             String subjectName = resolveSubjectName(s, evt);
+             msg.setSubject((s.isImportant() ? "[Important] " : "") + "[Schedule Change] " + subjectName);
+-            msg.setText("Schedule changed for " + subjectName + "\n" + formatDiffForEmail(evt.getDiff()));
++            msg.setText("Schedule changed for " + subjectName + "\n" + formatDiffForEmail($1));
+             mailSender.send(msg);
+ 
+             AuditLog log = new AuditLog();

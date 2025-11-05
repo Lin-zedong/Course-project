@@ -1,0 +1,61 @@
+--- a/src/main/java/com/example/schedulewatcher/controller/AdminSubscriptionController.java+++ b/src/main/java/com/example/schedulewatcher/controller/AdminSubscriptionController.java@@ -6,6 +6,9 @@ import com.example.schedulewatcher.repository.SubscriptionRepository;
+ import com.example.schedulewatcher.service.NotificationService;
+ import com.example.schedulewatcher.util.ScheduleDiffUtil;
++import com.example.schedulewatcher.model.SubjectType;
++import com.example.schedulewatcher.model.Subject;
++import com.example.schedulewatcher.repository.SubjectRepository;
+ import com.fasterxml.jackson.databind.ObjectMapper;
+ import com.fasterxml.jackson.databind.node.ObjectNode;
+ import org.springframework.stereotype.Controller;
+@@ -22,8 +25,11 @@ @Controller
+ @RequestMapping("/admin/subscriptions")
+ public class AdminSubscriptionController {
++    private String normalizeTeacher(String t){ if (t==null) return ""; t=t.trim(); if (t.toLowerCase().startsWith("t-")) return t.substring(2); return t; }
+ 
+     private final SubscriptionRepository subs;
++    @org.springframework.beans.factory.annotation.Autowired
++    private SubjectRepository subjects;
+     private final EventRepository events;
+     private final NotificationService notifier;
+     private static final ObjectMapper M = new ObjectMapper();
+@@ -53,7 +59,15 @@         model.addAttribute("from", f.getOrDefault("from",""));
+         model.addAttribute("to",   f.getOrDefault("to",""));
+         model.addAttribute("teacher", f.getOrDefault("teacher",""));
+-        return "admin/subscription_edit";
++        
++        // Prefill teacher when filters don't contain it and this is a TEACHER subscription
++        try {
++            String tVal = (String) model.getAttribute("teacher");
++            if ((tVal == null || tVal.isBlank()) && s.getSubject() != null && s.getSubject().getType() == SubjectType.TEACHER) {
++                model.addAttribute("teacher", s.getSubject().getRuzKey());
++            }
++        } catch (Exception ignore) {}
++return "admin/subscription_edit";
+     }
+ 
+     @PostMapping("/{id}/edit")
+@@ -66,6 +80,25 @@                        @RequestParam(required=false, name="to") String toTime,
+                        @RequestParam(required=false) String teacher) {
+         Subscription s = subs.findById(id).orElseThrow();
++        // Normalize teacher code (support 'T-1234' or '1234')
++        teacher = normalizeTeacher(teacher);
++        // If this is a TEACHER subscription and teacher is changed, update the subscription subject
++        try {
++            if (s.getSubject() != null && s.getSubject().getType() == SubjectType.TEACHER) {
++                String currentKey = s.getSubject().getRuzKey();
++                if (teacher != null && !teacher.isBlank() && !java.util.Objects.equals(currentKey, teacher)) {
++                    Subject subj = subjects.findByRuzKey(teacher).orElseGet(() -> {
++                        Subject ns = new Subject();
++                        ns.setName("Teacher " + teacher);
++                        ns.setRuzKey(teacher);
++                        ns.setType(SubjectType.TEACHER);
++                        return subjects.save(ns);
++                    });
++                    s.setSubject(subj);
++                }
++            }
++        } catch (Exception ignore) {}
++
+ 
+         String oldFilters = s.getFilters();
+         String newFilters = buildFiltersJson(room, date, fromTime, toTime, teacher);

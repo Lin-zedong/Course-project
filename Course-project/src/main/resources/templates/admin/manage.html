@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::content}, #{admin.brand}, true)}">
+<div th:fragment="content" class="admin-page">
+  <div th:if="${flashKey}" class="alert alert-success" th:text="#{${flashKey}}"></div>
+  <h2 th:text="#{admin.manage.title}">Manage</h2>
+
+  <!-- KPI cards -->
+  <div class="kpi-grid">
+    <div class="card"><div class="kpi-label" th:text="#{admin.users}">Users</div><div class="kpi-value" th:text="${userCount}">0</div></div>
+    <div class="card"><div class="kpi-label" th:text="#{admin.subs}">Subscriptions</div><div class="kpi-value" th:text="${subscriptionCount}">0</div></div>
+    <div class="card"><div class="kpi-label" th:text="#{admin.events24h}">Events 24h</div><div class="kpi-value" th:text="${eventsToday}">0</div></div>
+  </div>
+
+  <!-- Courses table -->
+  <h3 th:text="#{subs.courses}">Courses</h3>
+  <table class="list admin-table">
+    <thead>
+      <tr>
+        <th class="col-user"   th:text="#{admin.col.user}">User</th>
+        <th class="col-subj"   th:text="#{admin.col.subject}">Subject</th>
+        <th class="col-code"   th:text="#{admin.col.code}">Code</th>
+        <th class="col-filters" th:text="#{admin.col.filters}">Filters</th>
+        <th class="col-actions" th:text="#{admin.col.actions}">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="r : ${courseRows}">
+        <td class="col-user"   th:text="${r.userEmail}">user@example.com</td>
+        <td class="col-subj"   th:text="${r.subjectName}">MATH</td>
+        <td class="col-code"   th:text="${r.code}">MATH-101</td>
+        <td class="col-filters" th:text="${r.pretty}">101 · 2025-05-10 10:30–12:00 · T-123</td>
+        <td class="col-actions"><a th:href="@{'/admin/subscriptions/' + ${r.id} + '/edit'}" th:text="#{admin.col.edit}">Edit</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Teachers table -->
+  <h3 th:text="#{subs.teachers}">Teachers</h3>
+  <table class="list admin-table">
+    <thead>
+    <tr>
+      <th class="col-user"   th:text="#{admin.col.user}">User</th>
+      <th class="col-subj"   th:text="#{admin.col.subject}">Subject</th>
+      <th class="col-code"   th:text="#{admin.col.code}">Code</th>
+      <th class="col-filters" th:text="#{admin.col.filters}">Filters</th>
+      <th class="col-actions" th:text="#{admin.col.actions}">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="r : ${teacherRows}">
+      <td class="col-user"   th:text="${r.userEmail}">user@example.com</td>
+      <td class="col-subj"   th:text="${r.subjectName}">T-123</td>
+      <td class="col-code"   th:text="${r.code}">T-123</td>
+      <td class="col-filters" th:text="${r.pretty}">2025-05-10 10:30–12:00</td>
+      <td class="col-actions"><a th:href="@{'/admin/subscriptions/' + ${r.id} + '/edit'}" th:text="#{admin.col.edit}">Edit</a></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</html>

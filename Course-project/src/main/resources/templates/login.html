@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{login.title}">Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="login-page">
+<header class="topnav">
+    <div class="brand" th:text="#{login.title}">管理登录</div>
+    <nav></nav>
+    <div class="lang">
+        <a th:href="@{__${uri}__(lang='en')}">EN</a> |
+        <a th:href="@{__${uri}__(lang='zh')}">中文</a>
+    </div>
+</header>
+<div class="login-wrap">
+    <form class="login-card" method="post" th:action="@{/login}">
+        <h2 th:text="#{login.title}">Admin Login</h2>
+        <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <div class="form-row">
+            <label th:text="#{login.username}">Username</label>
+            <input type="text" name="username" required />
+        </div>
+        <div class="form-row">
+            <label th:text="#{login.password}">Password</label>
+            <input type="password" name="password" required />
+        </div>
+        <button type="submit" class="btn-primary" th:text="#{login.signin}">Sign in</button>
+    </form>
+</div>
+</body>
+</html>

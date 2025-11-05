@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::content}, #{admin.brand}, true)}">
+<div th:fragment="content">
+  <h2 th:text="#{admin.edit.title}">Edit Subscription</h2>
+  <form th:action="@{'/admin/subscriptions/' + ${s.id} + '/edit'}" method="post" class="card">
+    <div class="form-row">
+      <label th:text="#{admin.edit.room}">Room</label>
+      <input type="text" name="room" th:value="${room}"/>
+    </div>
+    <div class="form-row">
+      <label>[[#{admin.edit.date}]]</label>
+      <input type="text" name="date" th:value="${date}"/>
+    </div>
+    <div class="form-row">
+      <label>[[#{admin.edit.from}]]</label>
+      <input type="text" name="from" th:value="${from}"/>
+    </div>
+    <div class="form-row">
+      <label>[[#{admin.edit.to}]]</label>
+      <input type="text" name="to" th:value="${to}"/>
+    </div>
+    <div class="form-row">
+      <label th:text="#{admin.edit.teacher}">Teacher</label>
+      <input type="text" name="teacher" th:value="${teacher}"/>
+    </div>
+    <div class="form-row">
+      <button class="btn-primary" type="submit" th:text="#{admin.edit.save}">Save</button>
+      <a th:href="@{'/admin/subscriptions'}" style="margin-left:12px" th:text="#{admin.edit.cancel}">Cancel</a>
+    </div>
+    <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+  </form>
+</div>
+</html>

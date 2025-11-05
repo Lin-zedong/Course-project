@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content, brand, hideUserNav)">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="#{app.title}">Schedule Watcher</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<header class="topnav">
+    <div class="brand" th:text="${brand} ?: #{app.title}">Schedule Watcher</div>
+    <nav th:if="${hideUserNav} == null" th:data-admin="${brand}">
+        <a th:if="${brand} == #{admin.brand} ? false : true" th:href="@{/subscriptions}" th:text="#{nav.subscriptions}">Subscriptions</a>
+        <a th:href="@{/events}"        th:text="#{nav.events}">Events</a>
+    </nav>
+    <div class="lang">
+        <a th:href="@{__${uri}__(lang='en')}">EN</a> |
+        <a th:href="@{__${uri}__(lang='zh')}">中文</a>
+    </div>
+</header>
+
+<main class="container" th:insert="${content}"></main>
+</body>
+</html>

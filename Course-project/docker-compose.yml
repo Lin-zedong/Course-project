@@ -1,0 +1,58 @@
+services:
+  db:
+    image: postgres:16
+    container_name: sw_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: schedulewatcher
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./docker/db/initdb:/docker-entrypoint-initdb.d:ro
+      - sw_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d schedulewatcher"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    container_name: sw_mailhog
+    ports:
+      - "8025:8025"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:8025"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sw_app
+    depends_on:
+      db:
+        condition: service_healthy
+      mailhog:
+        condition: service_started
+    environment:
+      # --- DB ---
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/schedulewatcher
+      SPRING_DATASOURCE_USERNAME: schedule_user
+      SPRING_DATASOURCE_PASSWORD: schedule_password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: none
+      # --- Mail ---
+      SPRING_MAIL_HOST: mailhog
+      SPRING_MAIL_PORT: 1025
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "false"
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "false"
+      # --- Fetcher interval (ms) ---
+      FETCHER_FIXEDDELAY: 60000
+    ports:
+      - "8080:8080"
+
+volumes:
+  sw_db_data:

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::content}, null, null)}">
+<div th:fragment="content">
+    <h2 th:text="#{events.title}">Recent Changes</h2>
+    <div th:if="${#lists.isEmpty(events)}" th:text="#{events.empty}">No events</div>
+    <ul class="events" th:if="${!#lists.isEmpty(events)}" th:with="fmt=#{date.format}">
+        <li th:each="e : ${events}">
+            <div class="evt-line">
+                <strong th:text="${e.subject.name}">Subject</strong>
+                <em class="evt-time">(<span th:text="${#temporals.format(e.eventTime, fmt)}">time</span>)</em>
+            </div>
+            <pre class="diff" th:text="${@notificationService.formatDiffPlain(e.diff)}">diff</pre>
+        </li>
+    </ul>
+</div>
+</html>

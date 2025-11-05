@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::content}, #{admin.brand}, true)}">
+<div th:fragment="content">
+  <div th:if="${flashKey}" class="alert alert-success" th:text="#{${flashKey}}"></div>
+  <h2 th:text="#{admin.manage.title}">Manage</h2>
+  <table class="list">
+    <thead>
+      <tr>
+        <th>User</th>
+        <th>Subject</th>
+        <th>Code</th>
+        <th>Filters</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="s : ${subs}">
+        <td th:text="${s.user.email}">user@example.com</td>
+        <td th:text="${s.subject.name}">MATH</td>
+        <td th:text="${s.subject.ruzKey}">MATH-101</td>
+        <td th:text="${s.filters}">{"room":"101","date":"2025-05-10","from":"10:30","to":"12:00"}</td>
+        <td><a th:href="@{'/admin/subscriptions/' + ${s.id} + '/edit'}">Edit</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</html>

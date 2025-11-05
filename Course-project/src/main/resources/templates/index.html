@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::body}, null, null)}">
+<body>
+<div class="hero">
+<h1 th:text="#{index.welcome}">Welcome</h1>
+
+<form method="post" th:action="@{/profile/email}" class="card">
+    <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+    <label th:text="#{index.setEmail}">Notification Email</label>
+    <input type="email" name="email" th:value="${email}" placeholder="name@example.com" required/>
+    <button type="submit" class="btn-primary" th:text="#{index.save}">Save</button>
+</form>
+</div>
+</body>
+</html>

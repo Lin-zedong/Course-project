@@ -1,0 +1,13 @@
+--- a/src/main/resources/static/css/style.css+++ b/src/main/resources/static/css/style.css@@ -137,3 +137,13 @@ .alert{padding:10px 14px;border:1px solid #1f2937;border-radius:8px;background:#0f172a;color:#e2e8f0;margin:12px 0;}
+ .alert-success{border-color:#16a34a;}
+ .alert-error{border-color:#dc2626;}
++
++
++/* --- Auto-added rules for alignment & events readability --- */
++.admin-table { table-layout: fixed; width: 100%; }
++.admin-table th, .admin-table td { text-align: center; vertical-align: middle; }
++.admin-table .col-filters { text-align: left; }
++.admin-table .col-actions { text-align: right; white-space: nowrap; }
++.events .evt-line { display: flex; align-items: baseline; gap: 8px; }
++.events .evt-time { opacity: .8; font-style: italic; }
++.events .diff { white-space: pre-wrap; font-family: inherit; margin: 4px 0 12px; }

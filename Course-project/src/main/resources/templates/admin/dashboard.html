@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{admin.title}">Admin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<header class="topnav">
+    <div class="brand" th:text="#{admin.title}">Admin</div>
+    <nav></nav>
+    <div class="lang">
+        <a th:href="@{__${uri}__(lang='en')}">EN</a> |
+        <a th:href="@{__${uri}__(lang='zh')}">中文</a>
+    </div>
+</header>
+<main class="container">
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-title" th:text="#{admin.users}">Users</div>
+            <div class="stat-value" th:text="${userCount}">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title" th:text="#{admin.subs}">Subs</div>
+            <div class="stat-value" th:text="${subscriptionCount}">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title" th:text="#{admin.events24h}">Events in 24h</div>
+            <div class="stat-value" th:text="${eventsToday}">0</div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

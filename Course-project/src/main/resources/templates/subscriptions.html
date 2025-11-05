@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::content}, null, null)}">
+<div th:fragment="content" class="subs-page">
+  <h2 th:text="#{subs.title}">Your Subscriptions</h2>
+
+  <div th:if="${ok}"  class="alert alert-success" th:text="${ok}"></div>
+  <div th:if="${err}" class="alert alert-danger"  th:text="${err}"></div>
+
+  <!-- Add subscription row (aligned with email row) -->
+  <form method="post" th:action="@{/subscriptions}" class="row-grid add-form">
+    <label class="row-label" th:text="#{subs.add.label}">Course/Teacher code</label>
+    <div class="input-with-help row-input">
+      <input type="text" name="code" th:placeholder="#{subs.add.placeholder}" required/>
+      <div class="help-bubble">
+        <strong th:text="#{subs.add.helper.title}">Input format</strong>
+        <p th:text="#{subs.add.helper.message}">Course: MATH-101-2025-05-10-10.30-12.00; Teacher: T-123</p>
+      </div>
+    </div>
+    <button type="submit" class="btn-primary row-action" th:text="#{subs.add}">Add</button>
+    <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+  </form>
+
+  <!-- Email row (same total width as above) -->
+  <div class="email-row">
+    <form method="post" th:action="@{/profile/email}" class="row-grid">
+      <label class="row-label" th:text="#{subs.email}">Your email (for notifications)</label>
+      <input class="row-input" type="email" name="email" th:value="${email}" required/>
+      <button class="btn-primary row-action" th:text="#{subs.save}">Save</button>
+      <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    </form>
+  </div>
+
+  <!-- Courses section -->
+  <h3 th:text="#{subs.courses}">Courses</h3>
+  <table class="list">
+    <thead>
+      <tr>
+        <th class="subject" th:text="#{subs.header.subject}">Subscription</th>
+        <th class="actions" th:text="#{subs.header.actions}">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="s : ${subsView}" th:if="${s.formattedSession != null}">
+        <td class="subject">
+          <div th:text="${s.subjectName}">MATH</div>
+          <div class="sub-secondary" th:text="${s.formattedSession}">101 - 2025-05-10 10:30–12:00</div>
+        </td>
+        <td class="actions">
+          <form th:action="@{'/subscriptions/' + ${s.id} + '/delete'}" method="post" style="display:inline">
+            <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button class="btn-delete" th:text="#{subs.delete}">Delete</button>
+          </form>
+          <form th:action="@{'/subscriptions/' + ${s.id} + '/important'}" method="post" style="display:inline">
+            <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button class="btn-star" th:classappend="${s.important} ? ' active' : ''" aria-label="star"></button>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Teachers section -->
+  <h3 th:text="#{subs.teachers}" style="margin-top:20px">Teachers</h3>
+  <table class="list">
+    <thead>
+      <tr>
+        <th class="subject" th:text="#{subs.header.subject}">Subscription</th>
+        <th class="actions" th:text="#{subs.header.actions}">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="s : ${subsView}" th:if="${s.formattedSession == null}">
+        <td class="subject">
+          <div th:text="${s.subjectName}">Teacher 123</div>
+        </td>
+        <td class="actions">
+          <form th:action="@{'/subscriptions/' + ${s.id} + '/delete'}" method="post" style="display:inline">
+            <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button class="btn-delete" th:text="#{subs.delete}">Delete</button>
+          </form>
+          <form th:action="@{'/subscriptions/' + ${s.id} + '/important'}" method="post" style="display:inline">
+            <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button class="btn-star" th:classappend="${s.important} ? ' active' : ''" aria-label="star"></button>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</html>
