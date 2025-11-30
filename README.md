@@ -114,3 +114,10 @@
 ![1](Course-project/results/Mail_1.png)  
 ![2](Course-project/results/Mail_2.png)  
 ![3](Course-project/results/Mail_3.png)  
+
+Unit тестирование  
+![1](Course-project/results/unit_test_1.png)  
+![2](Course-project/results/unit_test_2.png)  
+![3](Course-project/results/unit_test_3.png)  
+![4](Course-project/results/unit_test_4.png)  
+  
