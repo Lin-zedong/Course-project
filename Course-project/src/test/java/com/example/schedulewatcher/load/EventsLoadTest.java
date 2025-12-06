@@ -39,17 +39,12 @@ class EventsLoadTest {
     @Autowired
     EventRepository events;
 
-    /**
-     * 负载测试：并发访问 /events，统计 RPS 和 p95 延迟。
-     *
-     * 标记为 @Disabled，避免每次 mvn test 都跑很久。
-     * 想真正做压力测试的时候，只要去掉 @Disabled 注解重新运行。
-     */
+    
     @Test
-    //@Disabled("Run manually when you need load testing")
+    
     @Transactional
     void eventsEndpoint_handlesParallelLoad() throws Exception {
-        // 1) 准备少量数据，让 /events 页面不是空的
+        
         Subject subj = new Subject();
         subj.setName("Load Test Course");
         subj.setRuzKey("G-LOAD");
@@ -67,8 +62,8 @@ class EventsLoadTest {
 
         String url = "http://localhost:" + port + "/events";
 
-        int threads = 20;   // 并发线程数
-        int perThread = 50; // 每个线程请求次数，总共 1000 次
+        int threads = 20;   
+        int perThread = 50; 
 
         ExecutorService pool = Executors.newFixedThreadPool(threads);
         CountDownLatch latch = new CountDownLatch(threads * perThread);
@@ -93,7 +88,7 @@ class EventsLoadTest {
             });
         }
 
-        // 最多等 60 秒
+        
         if (!latch.await(60, TimeUnit.SECONDS)) {
             throw new IllegalStateException("Load test did not finish in time");
         }
@@ -103,7 +98,7 @@ class EventsLoadTest {
         int total = threads * perThread;
         double rps = total / (elapsedMs / 1000.0);
 
-        // 计算 p95
+        
         List<Long> copied = new ArrayList<>(latencies);
         Collections.sort(copied);
         long p95Ns = copied.get((int) (copied.size() * 0.95) - 1);
@@ -112,9 +107,8 @@ class EventsLoadTest {
         System.out.printf("Total=%d, OK=%d, time=%d ms, RPS=%.2f, p95=%.2f ms%n",
                 total, okCount.get(), elapsedMs, rps, p95Ms);
 
-        // 断言：所有请求都成功（HTTP 200）
+        
         assertEquals(total, okCount.get());
-        // 是否要对 RPS / p95 做硬性限制可以自己决定，
-        // 例如：assertTrue(p95Ms < 300) 对齐你报告中的 P95 目标。
     }
 }
+
